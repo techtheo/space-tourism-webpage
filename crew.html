@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Frontend Mentor | Space tourism website</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700&family=Bellefair&family=Barlow:wght@400;700&display=swap"
+      rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="css/styles.css" rel="stylesheet">
+
+  <!-- Load the script with 'defer', which waits for the page to load so it can load the script -->
+  <script src="js/navigation.js" defer></script> 
+  <script src="js/crew.js" defer></script> 
+  
+</head>
+<body class="crew">
+  <a class="skip-to-content" href="crew.html#main" tabindex="1">Skip to content</a>
+  <header class="primary-header flex">
+    <div>
+      <img class="logo" src="assets/shared/logo.svg" alt="logo">
+    </div>
+    <button class="mobile-nav-toggle" aria-controls="primary-navigation"><span class="sr-only" aria-expanded="false">Menu</span></button>
+    <nav>
+        <ul id="primary-navigation" data-visible="false" class="primary-navigation flex underline-indicators ff-sans-cond">
+            <li><a class="uppercase text-white letter-spacing-2 " href="index.html"><span aria-hidden="true">00</span>Home</a></li>
+            <li><a class="uppercase text-white letter-spacing-2 " href="destination.html"><span aria-hidden="true">01</span>Destination</a></li>
+            <li class="active"><a class="uppercase text-white letter-spacing-2 " href="crew.html"><span aria-hidden="true">02</span>Crew</a></li>
+            <li><a class="uppercase text-white letter-spacing-2 " href="technology.html"><span aria-hidden="true">03</span>Technology</a></li>
+        </ul>
+    </nav>
+  </header>
+
+    <main class="grid-container grid-container--crew flow">
+
+      <h1 class="numbered-title ff-sans-cond letter-spacing-3"><span aria-hidden="true">02</span> Meet your crew</h1>
+      <div>
+        <picture>
+          <source id="webp-image" srcset="assets/crew/image-douglas-hurley.webp" type="image/webp">
+          <img id="png-image" src="assets/crew/image-douglas-hurley.png" alt="Commander Douglas Hurley">
+        </picture>
+      </div>
+
+      <article class="crew-info flow" tabindex="3">
+        <header class="flow flow--space-small">
+          <h2 id="crew-role" class="ff-serif text-white fs-600 uppercase">Commander</h2>
+          <p id="crew-name" class="ff-serif fs-700 uppercase">Douglas Hurley</p>
+        </header>
+        <p id="crew-details" class="ff-sans text-accent">
+          Douglas Gerald Hurley is an American engineer, former Marine Corps pilot and former NASA astronaut. He launched into space for the third time as commander of Crew Dragon Demo-2.
+        </p>
+      </article>
+
+      <div class="dot-indicators flex" role="tablist" aria-label="crew list">
+        <button id="main" role="tab" tabindex="2" aria-selected="true" aria-controls="commander-tab"><span class="sr-only">The Commander</span></button>
+        <button role="tab" tabindex="1" aria-selected="false" aria-controls="specialist-tab"><span class="sr-only">The Mission Specialist</span></button>
+        <button role="tab" tabindex="1" aria-selected="false" aria-controls="pilot-tab"><span class="sr-only">The Pilot</span></button>
+        <button role="tab" tabindex="1" aria-selected="false" aria-controls="engineer-tab"><span class="sr-only">The Engineer</span></button>
+      </div>
+      
+    </main>
+</body>
+</html>

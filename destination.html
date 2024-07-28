@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Space tourism website | Challenge by Frontend Mentor</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700&family=Bellefair&family=Barlow:wght@400;700&display=swap"
+      rel="stylesheet">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Custom CSS -->
+  <link href="css/styles.css" rel="stylesheet">
+
+  <!-- Load the script with 'defer', which waits for the page to load so it can load the script -->
+  <script src="js/navigation.js" defer></script> 
+  <script src="./js/destination.js" defer></script> 
+  
+</head>
+  <body class="destination">
+    <a class="skip-to-content" href="destination.html#main" tabindex="1">Skip to content</a>
+    <header class="primary-header flex">
+      <div>
+        <img class="logo" src="assets/shared/logo.svg" alt="logo">
+      </div>
+      <button class="mobile-nav-toggle" aria-controls="primary-navigation"><span class="sr-only" aria-expanded="false">Menu</span></button>
+      <nav>
+          <ul id="primary-navigation" data-visible="false" class="primary-navigation flex underline-indicators ff-sans-cond">
+              <li><a class="uppercase text-white letter-spacing-2 " href="index.html"><span aria-hidden="true">00</span>Home</a></li>
+              <li class="active"><a class="uppercase text-white letter-spacing-2 " href="destination.html"><span aria-hidden="true">01</span>Destination</a></li>
+              <li><a class="uppercase text-white letter-spacing-2 " href="crew.html"><span aria-hidden="true">02</span>Crew</a></li>
+              <li><a class="uppercase text-white letter-spacing-2 " href="technology.html"><span aria-hidden="true">03</span>Technology</a></li>
+          </ul>
+      </nav>
+    </header>
+
+    <main class="grid-container grid-container--destination flow">
+        <h1 class="numbered-title ff-sans-cond letter-spacing-3"><span aria-hidden="true">01</span> Pick your destination</h1>
+        <picture>
+          <source id="webp-image" srcset="assets/destination/image-moon.webp" type="image/webp">
+          <img id="png-image" src="assets/destination/image-moon.png" alt="The Moon">
+        </picture>
+        
+
+        <div class="tab-list underline-indicators ff-sans-cond flex" role="tablist" aria-label="destination list">
+            <button id="main" role="tab" aria-selected="true" aria-controls="moon-tab" class="text-accent uppercase letter-spacing-2" tabindex="2">Moon</button>
+            <button role="tab" aria-selected="false" aria-controls="mars-tab" class="text-accent uppercase letter-spacing-2" tabindex="1">Mars</button>
+            <button role="tab" aria-selected="false" aria-controls="europa-tab" class="text-accent uppercase letter-spacing-2" tabindex="1">Europa</button>
+            <button role="tab" aria-selected="false" aria-controls="titan-tab" class="text-accent uppercase letter-spacing-2" tabindex="1">Titan</button>
+        </div>
+
+        <article class="destination-info flow" tabindex="3">
+            <h2 id="destination-name" class="ff-serif text-white fs-800 uppercase">Moon</h2>
+            <p id="destination-description" class="ff-sans text-accent">
+                See our planet as you’ve never seen it before. A perfect relaxing trip away to help 
+                regain perspective and come back refreshed. While you’re there, take in some history 
+                by visiting the Luna 2 and Apollo 11 landing sites.
+            </p>
+        
+          <div class="destination-meta flex">
+              <div>
+                  <h3 class="ff-sans-cond text-accent uppercase fs-200 letter-spacing-3">Avg. distance</h3>
+                  <p id="avg-distance" class="ff-serif text-white uppercase">384,400 km</p>
+                  
+              </div>
+              <div>
+                  <h3 class="ff-sans-cond text-accent uppercase fs-200 letter-spacing-3">Est. travel time</h3>
+                  <p id="travel-time" class="ff-serif text-white uppercase">3 days</p>                
+              </div>
+          </div>
+        </article>
+    </main>
+  </body>
+</html>
