@@ -1,3 +1,6 @@
+// Define a variable to hold the technology data
+let technology = [];
+
 //!LOAD JSON DATA
 
 // Define a function to parse the response as JSON

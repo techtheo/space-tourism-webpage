@@ -1,4 +1,5 @@
-//!LOAD JSON DATA
+// Define a variable to hold the planets data
+let planets = [];
 
 // Define a function to convert the response to JSON format
 function jsonify(response) {

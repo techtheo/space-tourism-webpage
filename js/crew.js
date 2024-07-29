@@ -1,3 +1,6 @@
+// Define a variable to hold the crew data
+let crew = [];
+
 //!LOAD JSON DATA
 
 // Define a function to convert the response to JSON format
