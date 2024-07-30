@@ -3,180 +3,94 @@ let crew = [];
 
 //!LOAD JSON DATA
 
-// Define a function to convert the response to JSON format
-function jsonify(response) {
-    return response.json(); // Return the JSON-parsed response
-}
-
-// Define a function to log an error message to the console
-function showError() {
-    console.log('Page not found!'); // Print 'Page not found!' to the console
-}
-
-// When the window finishes loading, execute the following code
+// Fetch and load the crew data from JSON when the window finishes loading
 window.onload = async () => {
-    // Fetch data from the JSON file
-    const dados = await fetch("./data.json")
-        .then(jsonify)  // Convert the response to JSON
-        .catch(showError);  // If there is an error, call showError()
+    try {
+        // Fetch the JSON data from the specified file
+        const response = await fetch("./data.json");
+        // Parse the response as JSON
+        const dados = await response.json();
+        // Assign the crew data to the crew variable
+        crew = dados.crew;
+    } catch {
+        // Log an error message if there is a problem with fetching or parsing the data
+        console.log('Page not found!');
+    }
+};
 
-    // If data fetching is successful, assign the crew array to the crew variable
-    crew = dados.crew;
-}
-
-/*
-~ ----------------------------------
-~ CREW TABS -- CACHE ELEMENTS
-~ ----------------------------------
-*/
-
-//* TAB LIST
-// Select the tab list element with the role attribute 'tablist'
+//* CACHE ELEMENTS
+// Cache the tab list element which contains all the tab buttons
 const tabList = document.querySelector('[role="tablist"]');
-// Select all tab elements within the tab list
+// Cache all tab elements within the tab list
 const tabs = tabList.querySelectorAll('[role="tab"]');
-
-//* BUTTONS
-// Select the button for the commander tab using aria-controls attribute
-const btnCommander = document.querySelector('[aria-controls="commander-tab"]');
-// Select the button for the specialist tab using aria-controls attribute
-const btnSpecialist = document.querySelector('[aria-controls="specialist-tab"]');
-// Select the button for the pilot tab using aria-controls attribute
-const btnPilot = document.querySelector('[aria-controls="pilot-tab"]');
-// Select the button for the engineer tab using aria-controls attribute
-const btnEngineer = document.querySelector('[aria-controls="engineer-tab"]');
-
-//* IMAGES
-// Select the image element for displaying the WebP format of the crew member image
+// Cache buttons for each crew role with aria-controls attribute
+const btns = {
+    commander: document.querySelector('[aria-controls="commander-tab"]'),
+    specialist: document.querySelector('[aria-controls="specialist-tab"]'),
+    pilot: document.querySelector('[aria-controls="pilot-tab"]'),
+    engineer: document.querySelector('[aria-controls="engineer-tab"]')
+};
+// Cache the image elements for displaying crew member images in different formats
 const imgWebp = document.getElementById('webp-image');
-// Select the image element for displaying the PNG format of the crew member image
 const imgPng = document.getElementById('png-image');
-
-//* CREW
-// Select the element to display the crew member's role
+// Cache elements for displaying crew member details
 const crewRole = document.getElementById('crew-role');
-// Select the element to display the crew member's name
 const crewName = document.getElementById('crew-name');
-// Select the element to display the crew member's bio
 const crewDetails = document.getElementById('crew-details');
 
-/*
-~ ----------------------------------
-~ CREW TABS -- BUTTON FUNCTIONS
-~ ----------------------------------
-*/
+//* TAB FUNCTIONALITY
 
-//*-- PAGE CHANGE ON CLICK
-// Define a function to change the displayed crew details when a tab is clicked
-const pageChange_click = (member) => {
-    // Initialize the index for the crew array
-    crewIndex = 0;
-    // Determine the index based on the crew member and update tab states
-    switch (member) {
-        case 'commander':
-            crewIndex = 0; // Set index for commander
-            btnCommander.ariaSelected = true; // Set commander button as selected
-            btnCommander.focus(); // Focus on commander button
-            // Set other buttons' aria-selected attribute to false
-            btnSpecialist.ariaSelected = btnPilot.ariaSelected = btnEngineer.ariaSelected = false;
-            break;
-        case 'specialist':
-            crewIndex = 1; // Set index for specialist
-            btnSpecialist.ariaSelected = true; // Set specialist button as selected
-            btnSpecialist.focus(); // Focus on specialist button
-            btnCommander.ariaSelected = btnPilot.ariaSelected = btnEngineer.ariaSelected = false;
-            break;
-        case 'pilot':
-            crewIndex = 2; // Set index for pilot
-            btnPilot.ariaSelected = true; // Set pilot button as selected
-            btnPilot.focus(); // Focus on pilot button
-            btnCommander.ariaSelected = btnEngineer.ariaSelected = btnSpecialist.ariaSelected = false;
-            break;
-        case 'engineer':
-            crewIndex = 3; // Set index for engineer
-            btnEngineer.ariaSelected = true; // Set engineer button as selected
-            btnEngineer.focus(); // Focus on engineer button
-            btnCommander.ariaSelected = btnSpecialist.ariaSelected = btnPilot.ariaSelected = false;
-    }
+// Function to update the crew information displayed on the page
+const updateCrewInfo = (index) => {
+    // Set the text content of elements to display the current crew member's role, name, and bio
+    crewRole.innerText = crew[index].role;
+    crewName.innerText = crew[index].name;
+    crewDetails.innerText = crew[index].bio;
+    // Update image sources for the current crew member
+    imgWebp.srcset = crew[index].images.webp;
+    imgPng.src = crew[index].images.png;
+};
 
-    // Crew Details
-    crewRole.innerText = crew[crewIndex].role; // Set crew member role
-    crewName.innerText = crew[crewIndex].name; // Set crew member name
-    crewDetails.innerText = crew[crewIndex].bio; // Set crew member bio
+// Function to handle page changes based on the selected crew member
+const pageChange = (member) => {
+    // Find the index of the crew member based on their role
+    const index = ["commander", "specialist", "pilot", "engineer"].indexOf(member);
+    // Return early if the member is not found
+    if (index === -1) return;
 
-    // Images
-    imgWebp.srcset = crew[crewIndex].images.webp; // Set WebP image source
-    imgPng.src = crew[crewIndex].images.png; // Set PNG image source
-}
+    // Update the aria-selected attribute for all tabs to 'false'
+    tabs.forEach(tab => tab.setAttribute('aria-selected', 'false'));
+    // Set the aria-selected attribute of the selected button to 'true'
+    btns[member].setAttribute('aria-selected', 'true');
+    // Call updateCrewInfo to display the selected crew member's details
+    updateCrewInfo(index);
+};
 
-//*-- PAGE CHANGE ON KEY PRESS (KEYBOARD NAVIGATION)
-// Define a function to change the displayed crew details when using keyboard navigation
-const pageChange_keydown = (e) => {
-    // Define key codes for left and right arrow keys
-    const arrowLeft = "ArrowLeft";
-    const arrowRight = "ArrowRight";
-    const keyPressed = e.key; // Get the pressed key
-    let currentTab = '';
+// Event listener for keyboard navigation within the tab list
+tabList.onkeydown = (e) => {
+    // Find the currently selected tab
+    const currentTab = Array.from(tabs).find(tab => tab.getAttribute('aria-selected') === 'true');
+    // Return early if no tab is selected
+    if (!currentTab) return;
 
-    // Iterate through tabs to set tabindex and find the currently selected tab
-    for (let i = 0; i < tabs.length; i++) {
-        tabs[i].setAttribute('tabindex', 1); // Set tabindex to 1 for each tab
-        if (tabs[i].ariaSelected === 'true') { // Check if the tab is selected
-            currentTab = tabs[i]; // Set current tab
-            currentTab.setAttribute('tabindex', 2); // Set tabindex to 2 for the selected tab
-        }
-    }
+    // Function to find the next or previous tab element
+    const moveToNextTab = (next) => {
+        return next ? currentTab.nextElementSibling : currentTab.previousElementSibling;
+    };
 
     // Handle left arrow key press
-    if (keyPressed == arrowLeft) {
-        if (!currentTab.previousElementSibling) { // Check if there is no previous sibling
-            pageChange_click('engineer'); // Change to engineer tab
-            return;
-        }
-
-        switch (currentTab.previousElementSibling.innerText) {
-            case "The Commander":
-                pageChange_click('commander'); // Change to commander tab
-                return;
-            case "The Mission Specialist":
-                pageChange_click('specialist'); // Change to specialist tab
-                return;
-            case "The Pilot":
-                pageChange_click('pilot'); // Change to pilot tab
-        }
+    if (e.key === "ArrowLeft") {
+        // Change to the previous tab, or to 'engineer' if at the start
+        pageChange(moveToNextTab(false)?.innerText.split(' ')[1].toLowerCase() || 'engineer');
     }
-
     // Handle right arrow key press
-    if (keyPressed == arrowRight) {
-        if (!currentTab.nextElementSibling) { // Check if there is no next sibling
-            pageChange_click('commander'); // Change to commander tab
-            return;
-        }
-
-        switch (currentTab.nextElementSibling.innerText) {
-            case "The Mission Specialist":
-                pageChange_click('specialist'); // Change to specialist tab
-                return;
-            case "The Pilot":
-                pageChange_click('pilot'); // Change to pilot tab
-                return;
-            case "The Engineer":
-                pageChange_click('engineer'); // Change to engineer tab
-        }
+    else if (e.key === "ArrowRight") {
+        // Change to the next tab, or to 'commander' if at the end
+        pageChange(moveToNextTab(true)?.innerText.split(' ')[1].toLowerCase() || 'commander');
     }
-}
+};
 
-/*
-~ ----------------------------------
-~ CREW TABS -- FUNCTIONS ATTRIBUTIONS
-~ ----------------------------------
-*/
-
-// Assign onclick functions to each button to change the page content
-btnCommander.onclick = () => pageChange_click('commander'); // Change to commander tab on click
-btnSpecialist.onclick = () => pageChange_click('specialist'); // Change to specialist tab on click
-btnPilot.onclick = () => pageChange_click('pilot'); // Change to pilot tab on click
-btnEngineer.onclick = () => pageChange_click('engineer'); // Change to engineer tab on click
-
-// Assign onkeydown function to the tab list for keyboard navigation
-tabList.onkeydown = pageChange_keydown; // Change tab on keydown
+// Assign click event handlers to each button to change the page content when clicked
+Object.keys(btns).forEach(role => {
+    btns[role].onclick = () => pageChange(role);
+});

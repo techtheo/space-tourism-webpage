@@ -1,4 +1,4 @@
-// Define a variable to hold the planets data
+// Define a variable and initialize it with an empty empty array , to hold the planets data
 let planets = [];
 
 // Define a function to convert the response to JSON format
@@ -8,7 +8,7 @@ function jsonify(response) {
    
 // 🤞✌  // @@ This line defines a function named jsonify that takes one argument, response. and
 // Inside the jsonify function, the .json() method is called on the response object. 
-//This method is provided by the Fetch API and is used to parse the response body as JSON. 
+//This method  is used to parse the response body as JSON. 
 //The result is a JavaScript object representing the JSON data
 
 
@@ -36,7 +36,7 @@ window.onload = async () => {
 // The fetch function is called with the path to the JSON file ("./data.json"). This function returns a promise that resolves to the Response object representing the HTTP response.
 
 // .then(jsonify) is a shorthand for .then(response => jsonify(response)). In JavaScript, if you pass a function reference (like jsonify) without parentheses, it means the function will be called with the arguments provided by the preceding promise.
-// SUMMARY 🤦‍♂️😢
+// SUMMARY 🤦‍♂️😢)===>>>>
 //  .then(jsonify) is a shorthand way to use the jsonify function as a callback in the .then() method.
 
 // .catch(showError) method sets up an error handler. If any error occurs during the fetch operation or JSON parsing, the showError function is called, logging "Page not found!" to the console.

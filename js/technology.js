@@ -3,200 +3,108 @@ let technology = [];
 
 //!LOAD JSON DATA
 
-// Define a function to parse the response as JSON
-function jsonify(response) {
-    return response.json(); // Convert the response to JSON
-}
+// Fetch and load the technology data from JSON when the window finishes loading
+window.onload = async () => {
+    try {
+        // Fetch the JSON data from the specified file
+        const response = await fetch("./data.json");
+        // Parse the response as JSON
+        const dados = await response.json();
+        // Assign the technology data to the technology variable
+        technology = dados.technology;
+    } catch {
+        // Log an error message if there is a problem with fetching or parsing the data
+        console.log('Page not found!');
+    }
+};
 
-// Define a function to log an error message to the console
-function showError() {
-    console.log('Page not found!'); // Print 'Page not found!' to the console
-}
-
-/*
-~ ----------------------------------
-~ TECH TABS -- CACHE ELEMENTS
-~ ----------------------------------
-*/
-
-//* TAB LIST
-// Select the tab list element with the role attribute 'tablist'
+//* CACHE ELEMENTS
+// Cache the tab list element which contains all the tab buttons
 const tabList = document.querySelector('[role="tablist"]');
-// Select all tab elements within the tab list
+// Cache all tab elements within the tab list
 const tabs = tabList.querySelectorAll('[role="tab"]');
-
-//* BUTTONS
-// Select the button for the launch tab using aria-controls attribute
-const btnLauncher = document.querySelector('[aria-controls="launch-tab"]');
-// Select the button for the capsule tab using aria-controls attribute
-const btnCapsule = document.querySelector('[aria-controls="capsule-tab"]');
-// Select the button for the spaceport tab using aria-controls attribute
-const btnSpaceport = document.querySelector('[aria-controls="spaceport-tab"]');
-
-//* IMAGES
-// Select the image element for displaying the technology picture
+// Cache buttons for each technology tab with aria-controls attribute
+const btns = {
+    launcher: document.querySelector('[aria-controls="launch-tab"]'),
+    capsule: document.querySelector('[aria-controls="capsule-tab"]'),
+    spaceport: document.querySelector('[aria-controls="spaceport-tab"]')
+};
+// Cache elements for displaying technology images in different formats
 const techPicture = document.getElementById('tech-picture');
-// Select the image element for displaying the technology image
 const techImage = document.getElementById('tech-image');
-
-//* TECH
-// Select the element to display the technology name
+// Cache elements for displaying technology name and details
 const techName = document.getElementById('tech-name');
-// Select the element to display the technology details
 const techDetails = document.getElementById('tech-details');
 
-/*
-~ ----------------------------------
-~ WINDOWS RESIZE FUNCTION
-~ ----------------------------------
-*/
+//* TAB FUNCTIONALITY
 
-// When the window finishes loading, execute the following code
-window.onload = async () => {
-    // Fetch data from the JSON file
-    const dados = await fetch("./data.json")
-        .then(jsonify)  // Convert the response to JSON
-        .catch(showError);  // If there is an error, call showError()
-
-    // If data fetching is successful, assign the technology array to the technology variable
-    technology = dados.technology;
-    // Uncomment to set the initial image source based on the screen size
-    // if (window.matchMedia("(min-width: 51em)").matches) {
-    //     techImage.src = "./assets/technology/image-launch-vehicle-portrait.jpg";
-    // }
-}
-
-// When the window is resized, execute the following code
-window.onresize = () => {
-    // Initialize the index for the technology array
-    let techIndex = -1;
-    // Determine the index based on the selected tab
-    if (btnLauncher.ariaSelected == 'true') {
-        techIndex = 0; // Set index for launcher
-    }
-
-    if (btnSpaceport.ariaSelected == 'true') {
-        techIndex = 1; // Set index for spaceport
-    }
-
-    if (btnCapsule.ariaSelected == 'true') {
-        techIndex = 2; // Set index for capsule
-    } 
-
-    // Update the image source based on the screen size
+// Function to update the technology information displayed on the page
+const updateTechInfo = (index) => {
+    // Set the text content of elements to display the current technology's name and description
+    techName.innerText = technology[index].name;
+    techDetails.innerText = technology[index].description;
+    // Update image sources based on the screen size
     if (window.matchMedia("(min-width: 51em)").matches) {
-        techPicture.srcset = technology[techIndex].images.portrait; // Set portrait image source
+        // If the screen width is at least 51em, set the srcset for portrait images
+        techPicture.srcset = technology[index].images.portrait;
     } else {
-        techImage.src = technology[techIndex].images.landscape; // Set landscape image source
+        // If the screen width is less than 51em, set the src for landscape images
+        techImage.src = technology[index].images.landscape;
     }
-}
+};
 
-/*
-~ ----------------------------------
-~ TECH TABS -- BUTTON FUNCTIONS
-~ ----------------------------------
-*/
+// Function to handle page changes based on the selected technology tab
+const pageChange = (tech) => {
+    // Find the index of the technology based on the tab's role
+    const index = ["launcher", "spaceport", "capsule"].indexOf(tech);
+    // Return early if the technology is not found
+    if (index === -1) return;
+    
+    // Update the aria-selected attribute for all tabs to 'false'
+    tabs.forEach(tab => tab.setAttribute('aria-selected', 'false'));
+    // Set the aria-selected attribute of the selected button to 'true'
+    btns[tech].setAttribute('aria-selected', 'true');
+    // Call updateTechInfo to display the selected technology's details
+    updateTechInfo(index);
+};
 
-//*-- PAGE CHANGE ON CLICK
-// Define a function to change the displayed technology details when a tab is clicked
-const pageChange_click = (tech) => {
-    // Initialize the index for the technology array
-    let techIndex = 0;
-    // Determine the index based on the technology type and update tab states
-    switch (tech) {
-        case 'launcher':
-            techIndex = 0; // Set index for launcher
-            btnLauncher.ariaSelected = true; // Set launcher button as selected
-            btnLauncher.focus(); // Focus on launcher button
-            // Set other buttons' aria-selected attribute to false
-            btnCapsule.ariaSelected = btnSpaceport.ariaSelected = false;
-            break;
-        case 'spaceport':
-            techIndex = 1; // Set index for spaceport
-            btnSpaceport.ariaSelected = true; // Set spaceport button as selected
-            btnSpaceport.focus(); // Focus on spaceport button
-            btnLauncher.ariaSelected = btnCapsule.ariaSelected = false;
-            break;
-        case 'capsule':
-            techIndex = 2; // Set index for capsule
-            btnCapsule.ariaSelected = true; // Set capsule button as selected
-            btnCapsule.focus(); // Focus on capsule button
-            btnLauncher.ariaSelected = btnSpaceport.ariaSelected = false;
-    }
+// Event listener for keyboard navigation within the tab list
+tabList.onkeydown = (e) => {
+    // Find the currently selected tab
+    const currentTab = Array.from(tabs).find(tab => tab.getAttribute('aria-selected') === 'true');
+    // Return early if no tab is selected
+    if (!currentTab) return;
 
-    // Technology Details
-    techName.innerText = technology[techIndex].name; // Set technology name
-    techDetails.innerText = technology[techIndex].description; // Set technology details
-
-    // Images
-    if (window.matchMedia("(min-width: 51em)").matches) {
-        techPicture.srcset = technology[techIndex].images.portrait; // Set portrait image source
-    } else {
-        techImage.src = technology[techIndex].images.landscape; // Set landscape image source
-    }
-}
-
-//*-- PAGE CHANGE ON KEY PRESS (KEYBOARD NAVIGATION)
-// Define a function to change the displayed technology details when using keyboard navigation
-const pageChange_keydown = (e) => {
-    // Define key codes for left and right arrow keys
-    const arrowLeft = "ArrowLeft";
-    const arrowRight = "ArrowRight";
-    const keyPressed = e.key; // Get the pressed key
-    let currentTab = '';
-
-    // Iterate through tabs to set tabindex and find the currently selected tab
-    for (let i = 0; i < tabs.length; i++) {
-        tabs[i].setAttribute('tabindex', 1); // Set tabindex to 1 for each tab
-        if (tabs[i].ariaSelected === 'true') { // Check if the tab is selected
-            currentTab = tabs[i]; // Set current tab
-            currentTab.setAttribute('tabindex', 2); // Set tabindex to 2 for the selected tab
-        }
-    }
+    // Function to find the next or previous tab element
+    const moveToNextTab = (next) => next ? currentTab.nextElementSibling : currentTab.previousElementSibling;
 
     // Handle left arrow key press
-    if (keyPressed == arrowLeft) {
-        if (!currentTab.previousElementSibling) { // Check if there is no previous sibling
-            pageChange_click('capsule'); // Change to capsule tab
-            return;
-        }
-
-        switch (currentTab.previousElementSibling.innerText) {
-            case "Numbered buttons\n1":
-                pageChange_click('launcher'); // Change to launcher tab
-                break;
-            case "Numbered buttons\n2":
-                pageChange_click('spaceport'); // Change to spaceport tab
-        }
+    if (e.key === "ArrowLeft") {
+        // Change to the previous tab, or to 'capsule' if at the start
+        pageChange(moveToNextTab(false)?.innerText.split('\n')[1].toLowerCase() || 'capsule');
     }
-
     // Handle right arrow key press
-    if (keyPressed == arrowRight) {
-        if (!currentTab.nextElementSibling) { // Check if there is no next sibling
-            pageChange_click('launcher'); // Change to launcher tab
-            return;
-        }
-
-        switch (currentTab.nextElementSibling.innerText) {
-            case "Numbered buttons\n2":
-                pageChange_click('spaceport'); // Change to spaceport tab
-                break;
-            case "Numbered buttons\n3":
-                pageChange_click('capsule'); // Change to capsule tab
-        }
+    else if (e.key === "ArrowRight") {
+        // Change to the next tab, or to 'launcher' if at the end
+        pageChange(moveToNextTab(true)?.innerText.split('\n')[1].toLowerCase() || 'launcher');
     }
-}
+};
 
-/*
-~ ----------------------------------
-~ TECH TABS -- FUNCTION ATTRIBUTIONS
-~ ----------------------------------
-*/
+// Assign click event handlers to each button to change the page content when clicked
+Object.keys(btns).forEach(role => {
+    btns[role].onclick = () => pageChange(role);
+});
 
-// Assign onclick functions to each button to change the page content
-btnLauncher.onclick = () => pageChange_click('launcher'); // Change to launcher tab on click
-btnCapsule.onclick = () => pageChange_click('capsule'); // Change to capsule tab on click
-btnSpaceport.onclick = () => pageChange_click('spaceport'); // Change to spaceport tab on click
+// Update images on window resize to ensure the correct images are displayed
+window.onresize = () => {
+    // Find the currently selected tab
+    const currentTech = Array.from(tabs).find(tab => tab.getAttribute('aria-selected') === 'true');
+    // If a tab is selected, update the technology information to match the current tab
+    if (currentTech) pageChange(currentTech.innerText.split('\n')[1].toLowerCase());
+};
 
-// Assign onkeydown function to the tab list for keyboard navigation
-tabList.onkeydown = pageChange_keydown; // Change tab on keydown
+
+// ~ NOTE ~ \\
+
+// The line of code checks if a valid tab is currently selected. If so, it retrieves the second part of the tab’s text content (after splitting by newlines), converts it to lowercase, and passes it to the pageChange function. This process ensures that the page updates to reflect the currently selected tab, even when the window is resized, preserving the user’s context.
+
