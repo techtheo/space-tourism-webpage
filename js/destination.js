@@ -5,10 +5,16 @@ let planets = [];
 function jsonify(response) {
     return response.json(); // Return the JSON-parsed response
 }
+   
+// 🤞✌  // @@ This line defines a function named jsonify that takes one argument, response. and
+// Inside the jsonify function, the .json() method is called on the response object. 
+//This method is provided by the Fetch API and is used to parse the response body as JSON. 
+//The result is a JavaScript object representing the JSON data
+
 
 // Define a function to log an error message to the console
-function showError() {
-    console.log('Page not found!'); // Print 'Page not found!' to the console
+function showError() {  // This line defines a function named showError that takes no arguments.
+    console.log('Page not found!'); // log 'Page not found!' to the console
 }
 
 // When the window finishes loading, execute the following code
@@ -21,6 +27,24 @@ window.onload = async () => {
     // If data fetching is successful, assign the destinations array to the planets variable
     planets = dados ? dados.destinations : [];
 }
+
+
+// ~ NOTE 👀 ~ \\
+
+// This line sets up an event handler for the load event on the window object. The window.onload event is fired when the entire page (including all dependent resources like images and stylesheets) has fully loaded. The handler is an asynchronous function  that allows the use of await inside it. 
+
+// The fetch function is called with the path to the JSON file ("./data.json"). This function returns a promise that resolves to the Response object representing the HTTP response.
+
+// .then(jsonify) is a shorthand for .then(response => jsonify(response)). In JavaScript, if you pass a function reference (like jsonify) without parentheses, it means the function will be called with the arguments provided by the preceding promise.
+// SUMMARY 🤦‍♂️😢
+//  .then(jsonify) is a shorthand way to use the jsonify function as a callback in the .then() method.
+
+// .catch(showError) method sets up an error handler. If any error occurs during the fetch operation or JSON parsing, the showError function is called, logging "Page not found!" to the console.
+
+// ( planets = dados ? dados.destinations : [];) This assigns the value of dados.destinations to the planets variable if dados is truthy (i.e., not null or undefined). If dados is falsy, an empty array is assigned to planets. This line essentially checks if the data fetching was successful and then safely assigns the desired data.
+
+
+// NOTE CLOSE 👏 \\
 
 /*
 ~ ----------------------------------
@@ -181,3 +205,9 @@ btnTitan.onclick = () => pageChange_click('titan'); // Change to titan tab on cl
 
 // Assign onkeydown function to the tab list for keyboard navigation
 tabList.onkeydown = pageChange_keydown; // Change tab on keydown
+
+// ~ NOTE ~ \\
+
+// The line tabList.onkeydown = pageChange_keydown; is setting an event handler for the keydown event on an element referenced by the variable tabList. When a key is pressed while the tabList element is focused, the pageChange_keydown function will be called. This function will contain the logic to handle key presses, such as changing tabs or navigating through a list of items.
+
+// NOTE CLOSE \\ 
