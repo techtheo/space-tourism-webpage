@@ -110,22 +110,24 @@ const pageChange_click = (destination) => {
 };
 
 // Define a function to change the displayed destination details when using keyboard navigation
-tabList.onkeydown = (e) => {
+tabList.onkeydown = (e) => {    // assigned an anonymous function that takes an event object (e) as its parameter. This event object contains information about the keyboard event, including which key was pressed.
+
     // Define the order of tabs
     const order = ['moon', 'mars', 'europa', 'titan'];
     // Find the currently selected tab
-    const currentTab = order.find(tab => buttons[tab].ariaSelected === 'true');
+    const currentTab = order.find(tab => buttons[tab].ariaSelected === 'true'); // Identifies the currently selected tab by checking the ariaSelected attribute.
     // Get the index of the current tab
-    const currentIndex = order.indexOf(currentTab);
+    const currentIndex = order.indexOf(currentTab); // Determines the index of the current tab and calculates the new index based on the arrow key pressed.
 
     // Handle left arrow key press
-    if (e.key === "ArrowLeft") {
-        pageChange_click(order[(currentIndex - 1 + order.length) % order.length]);
-    }
+    if (e.key === "ArrowLeft") {  // Moves to the previous tab, wrapping around to the last tab if at the beginning.
+        pageChange_click(order[(currentIndex - 1 + order.length) % order.length]);  // to update the displayed content based on the new tab selection.
+    }   
+
     // Handle right arrow key press
-    else if (e.key === "ArrowRight") {
-        pageChange_click(order[(currentIndex + 1) % order.length]);
-    }
+    else if (e.key === "ArrowRight") { // Moves to the next tab, wrapping around to the first tab if at the end.
+        pageChange_click(order[(currentIndex + 1) % order.length]);  // to update the displayed content based on the new tab selection.
+    }  
 };
 
 // Assign onclick functions to each button to change the page content
