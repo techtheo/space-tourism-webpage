@@ -67,25 +67,25 @@ const pageChange = (member) => {
 };
 
 // Event listener for keyboard navigation within the tab list
+// Handle keyboard navigation for tabs
 tabList.onkeydown = (e) => {
     // Find the currently selected tab
     const currentTab = Array.from(tabs).find(tab => tab.getAttribute('aria-selected') === 'true');
-    // Return early if no tab is selected
+    
+    // Return if no tab is currently selected
     if (!currentTab) return;
 
     // Function to find the next or previous tab element
-    const moveToNextTab = (next) => {
-        return next ? currentTab.nextElementSibling : currentTab.previousElementSibling;
-    };
+    const moveToNextTab = (next) => next ? currentTab.nextElementSibling : currentTab.previousElementSibling;
 
     // Handle left arrow key press
     if (e.key === "ArrowLeft") {
-        // Change to the previous tab, or to 'engineer' if at the start
+        // Move to the previous tab or default to 'engineer' if at the start
         pageChange(moveToNextTab(false)?.innerText.split(' ')[1].toLowerCase() || 'engineer');
     }
     // Handle right arrow key press
     else if (e.key === "ArrowRight") {
-        // Change to the next tab, or to 'commander' if at the end
+        // Move to the next tab or default to 'commander' if at the end
         pageChange(moveToNextTab(true)?.innerText.split(' ')[1].toLowerCase() || 'commander');
     }
 };
